@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GamiStudy - Sector Externo y Comercio Internacional</title>
+    <meta name="description" content="GamiStudy - Plataforma interactiva de aprendizaje sobre Sector Externo y Comercio Internacional.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <style>
         /* =========================================
@@ -706,7 +707,7 @@
                 });
 
                 if (allCorrect) {
-                    this.btnCheck.textContent = "¡Códgio Comercial Validado!";
+                    this.btnCheck.textContent = "¡Código Comercial Validado!";
                     this.btnCheck.style.backgroundColor = "var(--accent-success)";
                     this.btnCheck.style.color = "#000";
                     fireConfetti();
@@ -740,8 +741,7 @@
                     
                     // Drag events
                     el.ondragstart = (e) => {
-                        e.dataTransfer.setData('text/plain', item.type);
-                        e.dataTransfer.setData('text/id', item.id);
+                        e.dataTransfer.setData('text/plain', item.id);
                         setTimeout(() => el.style.opacity = '0.4', 0);
                     };
                     el.ondragend = () => el.style.opacity = '1';
@@ -782,11 +782,11 @@
                                 bin.querySelector('.bin-items').appendChild(selectedEl);
                                 if (this.pool.children.length === 0) fireConfetti();
                             } else {
+                                selectedEl.classList.remove('selected');
                                 selectedEl.style.backgroundColor = 'var(--accent-alert)';
                                 const origBg = 'var(--bg-tertiary)';
                                 setTimeout(() => {
                                     selectedEl.style.backgroundColor = origBg;
-                                    selectedEl.classList.remove('selected');
                                 }, 400);
                             }
                         }
@@ -799,12 +799,12 @@
                 bin.style.backgroundColor = 'var(--bg-secondary)';
                 
                 const expectedType = bin.getAttribute('data-bin');
-                const draggedType = e.dataTransfer.getData('text/plain');
-                const draggedId = e.dataTransfer.getData('text/id');
+                const draggedId = e.dataTransfer.getData('text/plain');
+                const draggedEl = document.getElementById(draggedId);
 
-                if (draggedType === expectedType) {
-                    const draggedEl = document.getElementById(draggedId);
-                    if (draggedEl) {
+                if (draggedEl) {
+                    const draggedType = draggedEl.dataset.type;
+                    if (draggedType === expectedType) {
                         draggedEl.style.margin = '0';
                         draggedEl.style.backgroundColor = 'var(--bg-primary)';
                         draggedEl.style.border = `1px solid ${expectedType === 'arancel' ? 'var(--accent-interactive)' : 'var(--accent-warning)'}`;
@@ -814,12 +814,9 @@
                         bin.querySelector('.bin-items').appendChild(draggedEl);
                         
                         if (this.pool.children.length === 0) fireConfetti();
-                    }
-                } else {
-                    const el = document.getElementById(draggedId);
-                    if (el) {
-                        el.style.backgroundColor = 'var(--accent-alert)';
-                        setTimeout(() => el.style.backgroundColor = 'var(--bg-tertiary)', 400);
+                    } else {
+                        draggedEl.style.backgroundColor = 'var(--accent-alert)';
+                        setTimeout(() => draggedEl.style.backgroundColor = 'var(--bg-tertiary)', 400);
                     }
                 }
             }
