@@ -551,8 +551,11 @@
             }
             endQuiz() {
                 this.isFinished = true;
-                this.container.innerHTML = `<h2 class="completion-msg">Evaluación Cambiaria Finalizada</h2><p style="text-align:center; font-size: 1.5rem; margin-top:1rem;">Precisión Macroeconómica: ${this.score} / ${this.questions.length}</p><div style="text-align:center; margin-top:2rem;"><button class="nav-btn" onclick="quizApp.start()">Reiniciar Auditoría</button></div>`;
+                this.container.innerHTML = `<h2 class="completion-msg">Evaluación Cambiaria Finalizada</h2><p style="text-align:center; font-size: 1.5rem; margin-top:1rem;">Precisión Macroeconómica: ${this.score} / ${this.questions.length}</p><div style="text-align:center; margin-top:2rem;"><button class="nav-btn" id="btn-restart-quiz">Reiniciar Auditoría</button></div>`;
                 this.timerBar.style.width = '0%';
+                
+                document.getElementById('btn-restart-quiz').onclick = () => this.start();
+
                 if (this.score === this.questions.length) fireConfetti();
             }
         }
@@ -580,6 +583,7 @@
                     el.draggable = true;
                     el.textContent = item.term;
                     el.dataset.id = item.id;
+                    el.id = item.id;
                     
                     // Drag events
                     el.ondragstart = (e) => {
@@ -647,7 +651,7 @@
                 if (zone.classList.contains('matched')) return;
                 const draggedId = e.dataTransfer.getData('text/plain');
                 if (draggedId === zone.dataset.matchId) {
-                    const draggedEl = document.querySelector(`.draggable-term[data-id="${draggedId}"]`);
+                    const draggedEl = document.getElementById(draggedId);
                     if (draggedEl) {
                         zone.innerHTML = ''; zone.appendChild(draggedEl);
                         draggedEl.draggable = false; draggedEl.style.margin = '0'; draggedEl.style.border = 'none';
